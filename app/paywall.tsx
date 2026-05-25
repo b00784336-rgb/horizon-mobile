@@ -109,9 +109,16 @@ export default function PaywallScreen() {
         {/* Features */}
         <View style={styles.features}>
           {FEATURES.map((f) => (
-            <View key={f} style={styles.featureRow}>
-              <Text style={styles.featureCheck}>✓</Text>
-              <Text style={styles.featureText}>{f}</Text>
+            <View key={f.label} style={styles.featureRow}>
+              <Text style={[styles.featureCheck, f.webOnly && styles.featureCheckMuted]}>✓</Text>
+              <Text style={[styles.featureText, f.webOnly && styles.featureTextMuted]}>
+                {f.label}
+              </Text>
+              {f.webOnly && (
+                <View style={styles.webBadge}>
+                  <Text style={styles.webBadgeText}>🌐 web</Text>
+                </View>
+              )}
             </View>
           ))}
         </View>
@@ -181,13 +188,16 @@ export default function PaywallScreen() {
   );
 }
 
-const FEATURES = [
-  "Tableau de bord FIRE personnalisé",
-  "Suivi budget par catégories",
-  "Patrimoine et objectifs",
-  "Rapport PDF exportable",
-  "Mode couple",
-  "Synchronisation web + mobile",
+const FEATURES: { label: string; webOnly?: boolean }[] = [
+  { label: "Tableau de bord FIRE personnalisé" },
+  { label: "Suivi budget par catégories" },
+  { label: "Sources de revenus multiples" },
+  { label: "Patrimoine et objectifs" },
+  { label: "Rapport PDF exportable" },
+  { label: "Mode couple" },
+  { label: "Synchronisation web + mobile" },
+  { label: "Simulateur \"Et si ?\"", webOnly: true },
+  { label: "Patrimoine avancé", webOnly: true },
 ];
 
 const styles = StyleSheet.create({
@@ -215,7 +225,18 @@ const styles = StyleSheet.create({
   features: { gap: SPACING.sm },
   featureRow: { flexDirection: "row", gap: SPACING.sm, alignItems: "center" },
   featureCheck: { color: COLORS.success, fontWeight: "700", fontSize: 16 },
-  featureText: { color: COLORS.textSecondary, fontSize: 15 },
+  featureCheckMuted: { color: COLORS.textMuted },
+  featureText: { flex: 1, color: COLORS.textSecondary, fontSize: 15 },
+  featureTextMuted: { color: COLORS.textMuted },
+  webBadge: {
+    backgroundColor: COLORS.bgElevated,
+    borderRadius: RADIUS.full,
+    paddingHorizontal: 7,
+    paddingVertical: 2,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
+  webBadgeText: { color: COLORS.textMuted, fontSize: 10, fontWeight: "600" },
   plans: { flexDirection: "row", gap: SPACING.sm },
   planCard: {
     flex: 1,
